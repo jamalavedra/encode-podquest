@@ -55,7 +55,7 @@ const VideoPage: FC<{ video: Maybe<Post> }> = ({ video }) => {
 	}
 
 	const isCurrentItem = useMemo(() => {
-		return current&&current?.id === video && video.id && playing
+		return current && current?.id === video && video.id && playing
 	}, [current, video, playing])
 
 	const coverImg = useMemo(() => {
@@ -92,18 +92,22 @@ const VideoPage: FC<{ video: Maybe<Post> }> = ({ video }) => {
 				<div className="">
 					<div className="flex flex-col md:flex-row justify-between items-center py-4 px-4 md:px-16 space-y-6 md:space-y-0">
 						<div className="flex items-center space-x-6">
-							<Image
-								height={176}
-								width={176}
-								objectFit="cover"
-								className="rounded-lg"
-								src={coverImg}
-								alt=""
-							/>
+							{coverImg ? (
+								<Image
+									height={176}
+									width={176}
+									objectFit="cover"
+									className="rounded-lg"
+									src={coverImg}
+									alt={coverImg}
+								/>
+							) : (
+								<Skeleton width={176} className="h-44" />
+							)}
 							<div className="space-y-1">
 								<div className="flex items-baseline space-x-1">
 									<p className="text-6xl text-white font-extrabold">
-										{video?.metadata.name ?? <Skeleton />}
+										{video?.metadata.name ?? <Skeleton width={450} />}
 									</p>
 								</div>
 								<LensVideoDescription description={video?.metadata?.description} loading={!video} />
@@ -216,33 +220,41 @@ const VideoPage: FC<{ video: Maybe<Post> }> = ({ video }) => {
 							</div>
 						</div>
 					</div>
-					{video && <div className="flex items-start space-x-4 pt-4">
-						<Link href={`/channel/${video?.profile?.handle}`}>
-							<LensAvatar width={48} height={48} profile={video?.profile} />
-						</Link>
-						<div className="space-y-3 flex-1">
-							<div className="flex items-center justify-between">
-								<div>
-									<Link
-										href={`/channel/${video?.profile?.handle}`}
-										className="flex items-center space-x-1"
-									>
-										<p className="font-medium text-white">
-											{video?.profile?.name ?? video?.profile?.handle ?? <Skeleton width={150} />}
+					{video ? (
+						<div className="flex items-start space-x-4 pt-4">
+							<Link href={`/channel/${video?.profile?.handle}`}>
+								<LensAvatar width={48} height={48} profile={video?.profile} />
+							</Link>
+							<div className="space-y-3 flex-1">
+								<div className="flex items-center justify-between">
+									<div>
+										<Link
+											href={`/channel/${video?.profile?.handle}`}
+											className="flex items-center space-x-1"
+										>
+											<p className="font-medium text-white">
+												{video?.profile?.name ?? video?.profile?.handle ?? (
+													<Skeleton width={150} />
+												)}
+											</p>
+										</Link>
+										<p className="text-xs text-gray-500">
+											{(video && `${video?.profile?.stats?.totalFollowers} subscribers`) ?? (
+												<Skeleton width={80} />
+											)}
 										</p>
-									</Link>
-									<p className="text-xs text-gray-500">
-										{(video && `${video?.profile?.stats?.totalFollowers} subscribers`) ?? (
-											<Skeleton width={80} />
-										)}
-									</p>
-								</div>
-								<div>
-									<FollowButton profile={video?.profile} />
+									</div>
+									<div>
+										<FollowButton profile={video?.profile} />
+									</div>
 								</div>
 							</div>
 						</div>
-					</div>}
+					) : (
+						<div className="flex items-start space-x-4 pt-4">
+							<Skeleton width={48} height={48} />
+						</div>
+					)}
 				</div>
 				{!video || commentsLoading ? (
 					<div className="mt-6 flex items-center justify-center">
@@ -259,9 +271,11 @@ const VideoPage: FC<{ video: Maybe<Post> }> = ({ video }) => {
 									</p>
 								)}
 							</div>
-							{video && <div>
-								<NewComment videoId={video?.id} onChange={refetchComments} />
-							</div>}
+							{video && (
+								<div>
+									<NewComment videoId={video?.id} onChange={refetchComments} />
+								</div>
+							)}
 						</div>
 						<div className="space-y-6">
 							{comments?.map(comment => (

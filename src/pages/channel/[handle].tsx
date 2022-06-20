@@ -6,12 +6,8 @@ import { useQuery } from '@apollo/client'
 import Skeleton from 'react-loading-skeleton'
 import VideoCard from '@/components/VideoCard'
 import LensAvatar from '@/components/LensAvatar'
-import LensBanner from '@/components/LensBanner'
 import FollowButton from '@/components/FollowButton'
 import { GetStaticPaths, GetStaticProps } from 'next'
-import { GlobeAltIcon } from '@heroicons/react/outline'
-import { BadgeCheckIcon } from '@heroicons/react/solid'
-import TwitterIcon from '@/components/Icons/TwitterIcon'
 import GET_PROFILE from '@/graphql/profiles/get-profile'
 import { Post, Profile, Query, SingleProfileQueryRequest } from '@/types/lens'
 import GET_USER_PUBLICATIONS from '@/graphql/publications/get-user-publications'
@@ -63,9 +59,9 @@ const ChannelPage: FC<{ profile: Profile }> = ({ profile }) => {
 			</div>
 			<div className="px-4 md:px-16 flex pb-10">
 				{videos?.length > 0 ? (
-					<div className="lg:mx-16">
+					<div className="lg:mx-16 w-full">
 						<h3 className="py-6 text-white font-bold text-2xl">Uploads</h3>
-						<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
+						<div className="grid grid-cols-6 gap-6">
 							{videos.map((video, i) => (
 								<VideoCard key={video?.id ?? i} post={video} />
 							))}
