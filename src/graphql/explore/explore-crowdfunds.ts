@@ -144,74 +144,76 @@ const EXPLORE_PUBLICATIONS = gql`
 		}
 	}
 
-	fragment Erc20Fields on Erc20 {
-		name
-		symbol
-		decimals
-		address
-	}
-
 	fragment CollectModuleFields on CollectModule {
-		__typename
 		... on FreeCollectModuleSettings {
 			type
+			contractAddress
+			followerOnly
 		}
 		... on FeeCollectModuleSettings {
 			type
+			recipient
+			referralFee
+			contractAddress
+			followerOnly
 			amount {
 				asset {
-					...Erc20Fields
+					symbol
+					address
 				}
 				value
 			}
-			recipient
-			referralFee
 		}
 		... on LimitedFeeCollectModuleSettings {
 			type
 			collectLimit
+			recipient
+			referralFee
+			contractAddress
+			followerOnly
 			amount {
 				asset {
-					...Erc20Fields
+					symbol
+					address
 				}
 				value
 			}
-			recipient
-			referralFee
 		}
 		... on LimitedTimedFeeCollectModuleSettings {
 			type
 			collectLimit
+			recipient
+			endTimestamp
+			referralFee
+			contractAddress
+			followerOnly
 			amount {
 				asset {
-					...Erc20Fields
+					symbol
+					address
 				}
 				value
 			}
-			recipient
-			referralFee
-			endTimestamp
-		}
-		... on RevertCollectModuleSettings {
-			type
 		}
 		... on TimedFeeCollectModuleSettings {
 			type
+			recipient
+			endTimestamp
+			referralFee
+			contractAddress
+			followerOnly
 			amount {
 				asset {
-					...Erc20Fields
+					symbol
+					address
 				}
 				value
 			}
-			recipient
-			referralFee
-			endTimestamp
 		}
 	}
 
 	fragment PostFields on Post {
 		id
-		hidden
 		profile {
 			...ProfileFields
 		}
@@ -231,6 +233,8 @@ const EXPLORE_PUBLICATIONS = gql`
 			}
 		}
 		appId
+		hidden
+		hasCollectedByMe
 	}
 `
 

@@ -1,8 +1,14 @@
 export type Maybe<T> = T | null
 export type InputMaybe<T> = Maybe<T>
-export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] }
-export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> }
-export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> }
+export type Exact<T extends { [key: string]: unknown }> = {
+	[K in keyof T]: T[K]
+}
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
+	[SubKey in K]?: Maybe<T[SubKey]>
+}
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
+	[SubKey in K]: Maybe<T[SubKey]>
+}
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
 	ID: string
@@ -207,6 +213,7 @@ export type Comment = {
 	createdAt: Scalars['DateTime']
 	/** This will bring back the first comment of a comment and only be defined if using `publication` query and `commentOf` */
 	firstComment?: Maybe<Comment>
+	hasCollectedByMe: Scalars['Boolean']
 	/** If the publication has been hidden if it has then the content and media is not available */
 	hidden: Scalars['Boolean']
 	/** The internal publication id */
@@ -215,6 +222,7 @@ export type Comment = {
 	mainPost: MainPostReference
 	/** The metadata for the post */
 	metadata: MetadataOutput
+	mirrors: Array<Scalars['InternalPublicationId']>
 	/** The on chain content uri could be `ipfs://` or `https` */
 	onChainContentURI: Scalars['String']
 	/** The profile ref */
@@ -224,6 +232,11 @@ export type Comment = {
 	referenceModule?: Maybe<ReferenceModule>
 	/** The publication stats */
 	stats: PublicationStats
+}
+
+/** The social comment */
+export type CommentMirrorsArgs = {
+	by?: InputMaybe<Scalars['ProfileId']>
 }
 
 /** The social comment */
@@ -1312,6 +1325,7 @@ export type Mirror = {
 	collectNftAddress?: Maybe<Scalars['ContractAddress']>
 	/** The date the post was created on */
 	createdAt: Scalars['DateTime']
+	hasCollectedByMe: Scalars['Boolean']
 	/** If the publication has been hidden if it has then the content and media is not available */
 	hidden: Scalars['Boolean']
 	/** The internal publication id */
@@ -1747,12 +1761,14 @@ export type Post = {
 	collectedBy?: Maybe<Wallet>
 	/** The date the post was created on */
 	createdAt: Scalars['DateTime']
+	hasCollectedByMe: Scalars['Boolean']
 	/** If the publication has been hidden if it has then the content and media is not available */
 	hidden: Scalars['Boolean']
 	/** The internal publication id */
 	id: Scalars['InternalPublicationId']
 	/** The metadata for the post */
 	metadata: MetadataOutput
+	mirrors: Array<Scalars['InternalPublicationId']>
 	/** The on chain content uri could be `ipfs://` or `https` */
 	onChainContentURI: Scalars['String']
 	/** The profile ref */
@@ -1762,6 +1778,11 @@ export type Post = {
 	referenceModule?: Maybe<ReferenceModule>
 	/** The publication stats */
 	stats: PublicationStats
+}
+
+/** The social post */
+export type PostMirrorsArgs = {
+	by?: InputMaybe<Scalars['ProfileId']>
 }
 
 /** The social post */
@@ -1790,6 +1811,8 @@ export type Profile = {
 	id: Scalars['ProfileId']
 	/** Is the profile default */
 	isDefault: Scalars['Boolean']
+	isFollowedByMe: Scalars['Boolean']
+	isFollowing: Scalars['Boolean']
 	/** Metadata url */
 	metadata?: Maybe<Scalars['Url']>
 	/** Name of the profile */
@@ -1800,6 +1823,11 @@ export type Profile = {
 	picture?: Maybe<ProfileMedia>
 	/** Profile stats */
 	stats: ProfileStats
+}
+
+/** The Profile */
+export type ProfileIsFollowingArgs = {
+	who?: InputMaybe<Scalars['ProfileId']>
 }
 
 export type ProfileFollowModuleBeenRedeemedRequest = {
@@ -1818,7 +1846,6 @@ export type ProfileFollowModuleSettings = {
 	/** The follow module enum */
 	type: FollowModules
 }
-export type LensterPost = Post & Mirror & Comment & { pubId: string }
 
 export type ProfileMedia = MediaSet | NftImage
 
@@ -2034,7 +2061,9 @@ export type Query = {
 	following: PaginatedFollowingResult
 	generateModuleCurrencyApprovalData: GenerateModuleCurrencyApproval
 	globalProtocolStats: GlobalProtocolStats
+	/** @deprecated you should use the `hasCollectedByMe` field resolver on the publication, this will be removed from on 1st of July 2022 */
 	hasCollected: Array<HasCollectedResult>
+	/** @deprecated you should use the `mirrors` field resolver passing in the profile id the user is active on, this lives on the publication, this will be removed from on 1st of July 2022 */
 	hasMirrored: Array<HasMirroredResult>
 	hasTxHashBeenIndexed: TransactionResult
 	nftOwnershipChallenge: NftOwnershipChallengeResult

@@ -6,7 +6,7 @@ import { trimIndentedSpaces } from '@/lib/utils'
 import { useProfile } from '@/context/ProfileContext'
 import useCreatePost from '@/hooks/lens/useCreatePost'
 import { FC, FormEventHandler, useEffect, useState } from 'react'
-import { MetadataVersions, VideoMimeTypes } from '@/types/metadata'
+import { MetadataVersions } from '@/types/metadata'
 import { DEFAULT_COLLECT_TOKEN } from '@/constants'
 import { gql, useQuery } from '@apollo/client'
 import { Erc20 } from '@/types/lens'
@@ -99,7 +99,7 @@ const UploadPage: FC = () => {
 	return (
 		<div className="max-h-[85vh] overflow-x-auto">
 			<div className="container mx-auto py-12 px-4 md:px-0">
-				<div>
+				<div className="max-w-xl">
 					<h3 className="text-4xl mb-5 leading-6 font-medium text-white">Podquest Request</h3>
 					<p className="mt-2 text-md text-gray-400">
 						{'Uploaded crowdfund requests will be visible on your profile, search and explore pages.'}
@@ -110,8 +110,8 @@ const UploadPage: FC = () => {
 				<form onSubmit={uploadVideo} className="space-y-8 max-w-xl divide-y divide-gray-200">
 					<div className="space-y-8 divide-y divide-gray-200">
 						<div>
-							<div className="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
-								<div className="sm:col-span-4 max-w-xl">
+							<div className="mt-6 max-w-xl">
+								<div>
 									<label htmlFor="title" className="block text-sm font-medium text-gray-300">
 										Title
 									</label>
@@ -128,7 +128,7 @@ const UploadPage: FC = () => {
 										/>
 									</div>
 								</div>
-								<div className="sm:col-span-6 max-w-xl">
+								<div className="mt-5">
 									<label htmlFor="description" className="block text-sm font-medium text-gray-300">
 										Description
 									</label>
@@ -146,7 +146,7 @@ const UploadPage: FC = () => {
 									</div>
 								</div>
 
-								<div className="sm:col-span-4 max-w-xl">
+								<div className="mt-5">
 									<label htmlFor="description" className="block text-sm font-medium text-gray-300">
 										Select Currency
 									</label>
@@ -171,11 +171,11 @@ const UploadPage: FC = () => {
 									</div>
 								</div>
 
-								<div className="pb-3 sm:col-span-4 max-w-xl">
+								<div className="mt-5">
 									<label htmlFor="title" className="block text-sm font-medium text-gray-300">
 										Contribution amount
 									</label>
-									<div className="h-full flex items-center justify-center w-full space-x-1">
+									<div className="mt-1 h-full flex items-center justify-center w-full space-x-1">
 										<img
 											className="w-6 h-6"
 											height={24}
@@ -198,11 +198,11 @@ const UploadPage: FC = () => {
 										/>
 									</div>
 								</div>
-								<div className="pb-3 sm:col-span-4 max-w-xl">
+								<div className="mt-5">
 									<label htmlFor="title" className="block text-sm font-medium text-gray-300">
 										Funding Goal
 									</label>
-									<div className="h-full flex items-center justify-center w-full space-x-1">
+									<div className="mt-1 h-full flex items-center justify-center w-full space-x-1">
 										<img
 											className="w-6 h-6"
 											height={24}
@@ -225,7 +225,7 @@ const UploadPage: FC = () => {
 										/>
 									</div>
 								</div>
-								<div className="sm:col-span-4 max-w-xl">
+								<div className="mt-5">
 									<label htmlFor="title" className="block text-sm font-medium text-gray-300">
 										Funds recipient
 									</label>
@@ -242,7 +242,7 @@ const UploadPage: FC = () => {
 										/>
 									</div>
 								</div>
-								<div className="sm:col-span-4 max-w-xl">
+								<div className="mt-5 max-w-xl">
 									<label htmlFor="title" className="block text-sm font-medium text-gray-300">
 										Referral Fee
 									</label>

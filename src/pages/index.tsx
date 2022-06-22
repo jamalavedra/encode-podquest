@@ -7,7 +7,11 @@ import EXPLORE_PUBLICATIONS from '@/graphql/explore/explore-publications'
 import { MicrophoneIcon } from '@heroicons/react/solid'
 
 const HomePage = () => {
-	const { data, loading } = useQuery<{ explorePublications: ExplorePublicationResult }>(EXPLORE_PUBLICATIONS)
+	const { data, loading } = useQuery<{ explorePublications: ExplorePublicationResult }>(EXPLORE_PUBLICATIONS, {
+		onCompleted(data) {
+			console.log('EXPLORE_PUBLICATIONS', data.explorePublications)
+		},
+	})
 
 	const videos = useMemo<Post[]>(() => {
 		if (loading) return [...new Array(16).keys()].map(() => null)

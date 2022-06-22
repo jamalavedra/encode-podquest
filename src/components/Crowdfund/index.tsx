@@ -7,7 +7,7 @@ import ReferralAlert from '@/components/Shared/ReferralAlert'
 import CrowdfundShimmer from '@/components/Shared/Shimmer/CrowdfundShimmer'
 import { Card } from '@/components/UI/Card'
 import { Modal } from '@/components/UI/Modal'
-import { LensterPost } from '@/types/lens'
+import { LensterPost } from '@/types/lenstertypes'
 import { CashIcon, CurrencyDollarIcon, UsersIcon } from '@heroicons/react/outline'
 import getTokenImage from '@/lib/getTokenImage'
 import imagekitURL from '@/lib/imagekitURL'
@@ -46,22 +46,26 @@ interface Props {
 }
 
 const Crowdfund: FC<Props> = ({ fund }) => {
+	console.log('fund', fund)
 	const { data: account } = useAccount()
 
 	const [showFundersModal, setShowFundersModal] = useState<boolean>(false)
 	const [revenue, setRevenue] = useState<number>(0)
+
 	const { data, loading } = useQuery(COLLECT_QUERY, {
 		variables: { request: { publicationId: fund?.pubId ?? fund?.id } },
+		skip: true,
 		onCompleted(data) {
-			console.log(data)
+			console.log('collect: ', data, data.publication)
 			console.log('Query', '#8b5cf6', `Fetched collect module details Crowdfund:${fund?.pubId ?? fund?.id}`)
 		},
 	})
 
 	const collectModule: any = data?.publication?.collectModule
-	console.log('collectModule', fund)
+	console.log('collectModule outside: ', collectModule)
 
 	const { data: revenueData, loading: revenueLoading } = useQuery(PUBLICATION_REVENUE_QUERY, {
+		skip: true,
 		variables: {
 			request: {
 				publicationId: fund?.__typename === 'Mirror' ? fund?.mirrorOf?.id : fund?.pubId ?? fund?.id,

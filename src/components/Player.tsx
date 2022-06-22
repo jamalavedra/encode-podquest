@@ -52,7 +52,7 @@ function Player() {
 	// }, [state.volume, state.muted])
 
 	return (
-		<div className="flex border-t border-gray-600 px-4 justify-between items-center h-full">
+		<div className="flex border-t border-gray-600 bg-gray-800 z-10 px-4 justify-between items-center h-full">
 			<div className="min-w-[11.25rem] w-[30%]">
 				{current && (
 					<div className="flex items-center">
@@ -63,13 +63,10 @@ function Player() {
 								</div>
 							)}
 							<div>
-								<h6 className="text-sm line-clamp-1 text-white">{current?.metadata?.name}</h6>
-								<p className="text-[0.688rem] text-white text-opacity-70">{current?.profile?.name}</p>
+								<h6 className="text-md line-clamp-1 text-white">{current?.metadata?.name}</h6>
+								<p className="text-sm text-white text-opacity-70">{current?.profile?.name}</p>
 							</div>
 						</div>
-						<button className="w-8 h-8 flex items-center justify-center text-white text-opacity-70 hover:text-opacity-100">
-							<HeartIcon className="w-4 h-4" />
-						</button>
 					</div>
 				)}
 			</div>
@@ -110,7 +107,7 @@ function Player() {
 					onClick={controls[state.muted ? 'unmute' : 'mute']}
 					className="w-8 h-8 flex items-center justify-center text-white text-opacity-70 hover:text-opacity-100"
 				>
-					<VolumeUpIcon className="w-4 h-4" />
+					<VolumeUpIcon className="w-6 h-6" />
 				</button>
 				<div className="w-[5.813rem] max-w-full">
 					<CustomRange

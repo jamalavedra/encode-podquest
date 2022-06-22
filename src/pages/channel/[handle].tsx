@@ -33,7 +33,7 @@ const ChannelPage: FC<{ profile: Profile }> = ({ profile }) => {
 			<Meta title={profile && `${profile?.name ?? profile?.handle}'s channel | ${APP_NAME}`} />
 
 			<div className="-mt-1 bg-gray-600">
-				<div className="">
+				<div className="max-w-3xl">
 					<div className="flex flex-col md:flex-row justify-between items-center py-4 px-4 md:px-16 space-y-6 md:space-y-0">
 						<div className="flex items-center space-x-6">
 							<LensAvatar profile={profile} className="rounded-full bg-cover" width={200} height={200} />
@@ -46,13 +46,17 @@ const ChannelPage: FC<{ profile: Profile }> = ({ profile }) => {
 								<p className="text-xs md:text-sm max-w-prose text-gray-200">
 									{profile ? profile.bio : <Skeleton count={2} width={230} />}
 								</p>
+								<div className="text-gray-600 flex">
+									<FollowButton profile={profile} />
+									<p className="mt-2 font-hairline text-sm text-center md:text-right mr-2 md:mr-0">
+										{profile ? (
+											`${profile?.stats?.totalFollowers} subscribers`
+										) : (
+											<Skeleton width={80} />
+										)}
+									</p>
+								</div>
 							</div>
-						</div>
-						<div className="text-gray-600 flex flex-row-reverse md:flex-col justify-start w-full md:w-auto">
-							<FollowButton profile={profile} />
-							<p className="mt-2 font-hairline text-sm text-center md:text-right mr-2 md:mr-0">
-								{profile ? `${profile?.stats?.totalFollowers} subscribers` : <Skeleton width={80} />}
-							</p>
 						</div>
 					</div>
 				</div>

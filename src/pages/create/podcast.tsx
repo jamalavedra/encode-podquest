@@ -73,10 +73,10 @@ const UploadPage: FC = () => {
 						{'Other Lens-powered sites may choose to show them as well.'}
 					</p>
 				</div>
-				<form onSubmit={uploadVideo} className="space-y-8 divide-y max-w-5xl divide-gray-200">
+				<form onSubmit={uploadVideo} className="space-y-8 divide-y max-w-xl divide-gray-200">
 					<div className="space-y-8 divide-y divide-gray-200">
 						<div>
-							<div className="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+							<div className="mt-6">
 								<MediaPickerWithThumbnails
 									className="h-full"
 									name="Audio"
@@ -90,7 +90,7 @@ const UploadPage: FC = () => {
 									}}
 									required
 								/>
-								<div className="sm:col-span-4 max-w-xl">
+								<div className="mt-3 max-w-xl">
 									<label htmlFor="title" className="block text-sm font-medium text-gray-300">
 										Title
 									</label>
@@ -108,7 +108,7 @@ const UploadPage: FC = () => {
 									</div>
 								</div>
 
-								<div className="sm:col-span-6 max-w-xl">
+								<div className="mt-3 max-w-xl">
 									<label htmlFor="description" className="block text-sm font-medium text-gray-300">
 										Description
 									</label>

@@ -1,14 +1,20 @@
 import { useMemo } from 'react'
 import { useQuery } from '@apollo/client'
-import { ExplorePublicationResult, Post } from '@/types/lens'
+import { ExplorePublicationResult } from '@/types/lens'
 import EXPLORE_CROWDFUNDS from '@/graphql/explore/explore-crowdfunds'
 import { PlusIcon } from '@heroicons/react/outline'
 import Link from 'next/link'
 import CrowdfundCard from '@/components/CrowdfundCard'
-const QuestPage = () => {
-	const { data, loading } = useQuery<{ explorePublications: ExplorePublicationResult }>(EXPLORE_CROWDFUNDS)
+import { LensterPost } from '@/types/lenstertypes'
 
-	const crowdfunds = useMemo<Post[]>(() => {
+const QuestPage = () => {
+	const { data, loading } = useQuery<{ explorePublications: ExplorePublicationResult }>(EXPLORE_CROWDFUNDS, {
+		onCompleted(data) {
+			console.log('EXPLORE_CROWDFUNDS', data.explorePublications)
+		},
+	})
+
+	const crowdfunds = useMemo<LensterPost[]>(() => {
 		if (loading) return [...new Array(16).keys()].map(() => null)
 		return data?.explorePublications?.items?.filter(post => !post.hidden)
 		// eslint-disable-next-line react-hooks/exhaustive-deps
