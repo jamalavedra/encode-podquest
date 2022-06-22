@@ -46,7 +46,6 @@ interface Props {
 }
 
 const Crowdfund: FC<Props> = ({ fund }) => {
-	console.log('fund', fund)
 	const { data: account } = useAccount()
 
 	const [showFundersModal, setShowFundersModal] = useState<boolean>(false)
@@ -54,18 +53,17 @@ const Crowdfund: FC<Props> = ({ fund }) => {
 
 	const { data, loading } = useQuery(COLLECT_QUERY, {
 		variables: { request: { publicationId: fund?.pubId ?? fund?.id } },
-		skip: true,
+		fetchPolicy: 'no-cache',
+
 		onCompleted(data) {
-			console.log('collect: ', data, data.publication)
 			console.log('Query', '#8b5cf6', `Fetched collect module details Crowdfund:${fund?.pubId ?? fund?.id}`)
 		},
 	})
 
 	const collectModule: any = data?.publication?.collectModule
-	console.log('collectModule outside: ', collectModule)
 
 	const { data: revenueData, loading: revenueLoading } = useQuery(PUBLICATION_REVENUE_QUERY, {
-		skip: true,
+		fetchPolicy: 'no-cache',
 		variables: {
 			request: {
 				publicationId: fund?.__typename === 'Mirror' ? fund?.mirrorOf?.id : fund?.pubId ?? fund?.id,

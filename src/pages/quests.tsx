@@ -9,9 +9,7 @@ import { LensterPost } from '@/types/lenstertypes'
 
 const QuestPage = () => {
 	const { data, loading } = useQuery<{ explorePublications: ExplorePublicationResult }>(EXPLORE_CROWDFUNDS, {
-		onCompleted(data) {
-			console.log('EXPLORE_CROWDFUNDS', data.explorePublications)
-		},
+		fetchPolicy: 'no-cache',
 	})
 
 	const crowdfunds = useMemo<LensterPost[]>(() => {
