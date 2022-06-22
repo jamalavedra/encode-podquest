@@ -15,13 +15,13 @@ const QuestPage = () => {
 	})
 
 	const crowdfunds = useMemo<LensterPost[]>(() => {
-		if (loading) return [...new Array(16).keys()].map(() => null)
+		if (loading) return [...new Array(3).keys()].map(() => null)
 		return data?.explorePublications?.items?.filter(post => !post.hidden)
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [data?.explorePublications, loading])
 
 	return (
-		<div className="max-h-[85vh] overflow-x-auto">
+		<div className="max-h-[78vh] overflow-x-auto">
 			<div className={`my-6 relative mx-6 ${crowdfunds?.length == 0 ? 'flex-1 flex' : ''}`}>
 				<section className="mb-8 w-full">
 					<header className="flex items-center mb-6">
