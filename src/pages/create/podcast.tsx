@@ -8,7 +8,17 @@ import useCreatePost from '@/hooks/lens/useCreatePost'
 import { FC, FormEventHandler, useEffect, useState } from 'react'
 import { MetadataVersions, VideoMimeTypes } from '@/types/metadata'
 import { MediaPickerWithThumbnails } from '@/components/MediaPicker'
+import ChooseFile from '@/components/ChooseFile'
+import React, { ChangeEvent } from 'react'
+import uploadAssetsToIPFS from '@/lib/uploadAssetsToIPFS'
+import Spinner from '@/components/Spinner'
+import dynamic from 'next/dynamic'
+import { defaultFeeData, defaultModuleData, FEE_DATA_TYPE, getModule } from '@/lib/getModule'
+import { EnabledModule } from '@/types/lens'
 
+const SelectCollectModule = dynamic(() => import('@/components/Shared/SelectCollectModule'), {
+	loading: () => <div className="mb-1 w-5 h-5 rounded-lg shimmer" />,
+})
 const UploadPage: FC = () => {
 	const router = useRouter()
 	const { profile, isAuthenticated } = useProfile()
@@ -26,35 +36,64 @@ const UploadPage: FC = () => {
 	const [videoType, setVideoType] = useState<string>(null)
 	const [description, setDescription] = useState<string>('')
 	const [thumbnailCID, setThumbnailCID] = useState<string>(null)
+	const [thumbnail, setThumbnail] = useState<string>()
+	const [uploading, setUploading] = useState<boolean>(false)
+	const [thumbnailType, setThumbnailType] = useState<string>()
+	const [feeData, setFeeData] = useState<FEE_DATA_TYPE>(defaultFeeData)
+	const [selectedModule, setSelectedModule] = useState<EnabledModule>(defaultModuleData)
+	const handleUpload = async (evt: ChangeEvent<HTMLInputElement>) => {
+		evt.preventDefault()
+		setUploading(true)
+		try {
+			const attachment = await uploadAssetsToIPFS(evt.target.files)
+			if (attachment[0]?.item) {
+				setThumbnail(attachment[0].item)
+				setThumbnailType(attachment[0].type)
+			}
+		} finally {
+			setUploading(false)
+		}
+	}
 
 	const uploadVideo: FormEventHandler<HTMLFormElement> = async event => {
 		event.preventDefault()
 		if (!videoCID) return toast.error('Please wait for the video to finish uploading.')
 		if (!thumbnailCID) return toast.error('Please wait for the thumbnail to finish uploading.')
+		console.log(getModule(selectedModule.moduleName).config, feeData)
+		await createPost(
+			{
+				version: MetadataVersions.one,
+				metadata_id: uuidv4(),
+				description: trimIndentedSpaces(description),
+				content: trimIndentedSpaces(description),
+				external_url: null,
+				image: `ipfs://${thumbnail}`,
+				imageMimeType: 'image/jpeg',
+				animation_url: `ipfs://${videoCID}`,
 
-		await createPost({
-			version: MetadataVersions.one,
-			metadata_id: uuidv4(),
-			description: trimIndentedSpaces(description),
-			content: trimIndentedSpaces(description),
-			external_url: null,
-			image: `ipfs://${thumbnailCID}`,
-			imageMimeType: 'image/jpeg',
-			animation_url: `ipfs://${videoCID}`,
-			name: title,
-			attributes: [
-				{
-					traitType: 'string',
-					key: 'type',
-					value: 'post',
-				},
-			],
-			media: [
-				{ item: `ipfs://${videoCID}`, type: videoType as VideoMimeTypes },
-				{ item: `ipfs://${thumbnailCID}`, type: 'image/jpeg' },
-			],
-			appId: APP_ID,
-		})
+				name: title,
+				attributes: [
+					{
+						traitType: 'string',
+						key: 'type',
+						value: 'post',
+					},
+				],
+				media: [
+					{ item: `ipfs://${videoCID}`, type: videoType as VideoMimeTypes },
+					{ item: `ipfs://${thumbnail}`, type: 'image/jpeg' },
+				],
+				appId: APP_ID,
+			},
+			{},
+			{
+				collectModules: feeData.recipient
+					? {
+							[getModule(selectedModule.moduleName).config]: feeData,
+					  }
+					: getModule(selectedModule.moduleName).config,
+			}
+		)
 
 		setTitle('')
 		setDescription('')
@@ -81,7 +120,7 @@ const UploadPage: FC = () => {
 									className="h-full"
 									name="Audio"
 									cover
-									label="Choose or drag and drop media"
+									label="Choose or drag and drop podcast file"
 									maxSize={100}
 									onThumbnailChange={setThumbnailCID}
 									onChange={(CID, mimeType) => {
@@ -101,7 +140,7 @@ const UploadPage: FC = () => {
 											type="text"
 											className="text-white shadow-sm bg-gray-600 block w-full sm:text-sm border-gray-300 rounded-md placeholder:text-gray-400"
 											required
-											placeholder="Badgers : animated music video : MrWeebl"
+											placeholder="Badgers : podcast : MrWeebl"
 											value={title}
 											onChange={event => setTitle(event.target.value)}
 										/>
@@ -127,6 +166,44 @@ const UploadPage: FC = () => {
 									<p className="mt-2 text-sm text-gray-400">
 										Will be shown below the audio, across Lens sites, and on the collected NFT.
 									</p>
+								</div>
+
+								<div className="mt-3 max-w-xl">
+									<label htmlFor="description" className="block text-sm font-medium text-gray-300">
+										Thumbnail
+									</label>
+									<div className="mt-1">
+										<div className="space-y-3">
+											{thumbnail && (
+												<img
+													className="w-60 h-60 rounded-lg"
+													height={240}
+													width={240}
+													src={'https://ipfs.infura.io/ipfs/' + thumbnail}
+													alt={'https://ipfs.infura.io/ipfs/' + thumbnail}
+												/>
+											)}
+											<div className="flex items-center space-x-3">
+												<ChooseFile
+													onChange={(evt: ChangeEvent<HTMLInputElement>) => handleUpload(evt)}
+												/>
+												{uploading && <Spinner />}
+											</div>
+										</div>
+									</div>
+								</div>
+								<div className="mt-3 max-w-xl">
+									<label htmlFor="description" className="block text-sm font-medium text-gray-300">
+										NFT options
+									</label>
+									<div className="mt-1">
+										<SelectCollectModule
+											feeData={feeData}
+											setFeeData={setFeeData}
+											selectedModule={selectedModule}
+											setSelectedModule={setSelectedModule}
+										/>
+									</div>
 								</div>
 							</div>
 							<fieldset className="mt-4">

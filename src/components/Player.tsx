@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setControls, setPlaying } from '@/stores/player'
 import { PauseIcon, PlayIcon } from '@heroicons/react/solid'
 import { ChevronLeftIcon, ChevronRightIcon, HeartIcon, VolumeUpIcon } from '@heroicons/react/outline'
-import { getVideo } from '@/lib/media'
+import { getImageUrl, getVideo, includesImage, normalizeUrl } from '@/lib/media'
 
 function Player() {
 	const dispatch = useDispatch()
@@ -33,10 +33,10 @@ function Player() {
 	const coverImg = useMemo(() => {
 		if (!current) return
 
-		// if (includesImage(post.metadata.media)) return getImageUrl(post.metadata.media)
-		// if (post.metadata.cover) {
-		// 	return normalizeUrl(post.metadata.cover.original.url)
-		// }
+		if (includesImage(current.metadata.media)) return getImageUrl(current.metadata.media)
+		if (current.metadata.cover) {
+			return normalizeUrl(current.metadata.cover.original.url)
+		}
 
 		return `https://avatar.tobi.sh/${current.id}.png`
 	}, [current])

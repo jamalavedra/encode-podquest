@@ -8,6 +8,7 @@ import formatDistanceToNowStrict from 'date-fns/formatDistanceToNowStrict'
 import { useDispatch, useSelector } from 'react-redux'
 import { setCurrent } from '@/stores/player'
 import { PauseIcon, PlayIcon } from '@heroicons/react/solid'
+import { getImageUrl, includesImage, normalizeUrl } from '@/lib/media'
 
 const VideoCard: FC<{ post?: Post; expanded?: boolean }> = ({ post, expanded = false }) => {
 	const dispatch = useDispatch()
@@ -27,10 +28,10 @@ const VideoCard: FC<{ post?: Post; expanded?: boolean }> = ({ post, expanded = f
 
 	const coverImg = useMemo(() => {
 		if (!post) return
-		// if (includesImage(post.metadata.media)) return getImageUrl(post.metadata.media)
-		// if (post.metadata.cover) {
-		// 	return normalizeUrl(post.metadata.cover.original.url)
-		// }
+		if (includesImage(post.metadata.media)) return getImageUrl(post.metadata.media)
+		if (post.metadata.cover) {
+			return normalizeUrl(post.metadata.cover.original.url)
+		}
 
 		return `https://avatar.tobi.sh/${post.id}.png`
 	}, [post])

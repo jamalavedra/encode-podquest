@@ -110,8 +110,6 @@ type ThumbnailsProps = { onThumbnailChange?: (arg0: string) => void } & Omit<Ipf
 
 export const MediaPickerWithThumbnails: FC<ThumbnailsProps> = ({ onThumbnailChange, ...props }) => {
 	const [thumbnails, setThumbnails] = useState<string[]>([])
-	const [uploadProgress, setUploadProgress] = useState<number>(0)
-	const [selectedThumbnail, setSelectedThumbnail] = useState(0)
 	const onUpload = (file: File) => {
 		generateVideoThumbnails(file, 3).then(setThumbnails)
 	}
@@ -124,48 +122,15 @@ export const MediaPickerWithThumbnails: FC<ThumbnailsProps> = ({ onThumbnailChan
 		// 	setUploadProgress(0)
 		// })
 		onThumbnailChange('6935571396329283584')
-		setUploadProgress(0)
-	}, [thumbnails, selectedThumbnail, onThumbnailChange])
+	}, [thumbnails, onThumbnailChange])
 
 	return (
 		<>
 			<div className="sm:col-span-3">
-				<div className="aspect-w-16 aspect-h-9">
+				<div className="aspect-w-16 aspect-h-6">
 					<IpfsMediaPicker onFileChange={onUpload} onReset={() => setThumbnails([])} {...props} />
 				</div>
 			</div>
-			{thumbnails.length > 0 && (
-				<div className="sm:col-span-3">
-					<span className="block text-sm font-medium text-gray-700 mb-1">Audio Thumbnail</span>
-					<div className="grid grid-cols-2 gap-2">
-						{thumbnails.map((url, i) => (
-							<button
-								type="button"
-								onClick={() => setSelectedThumbnail(i)}
-								className={classNames(
-									selectedThumbnail == i
-										? 'border-blue-500'
-										: 'border-transparent hover:border-blue-500',
-									'rounded-lg overflow-hidden border-2 transition relative'
-								)}
-								key={i}
-							>
-								<img src={url} alt={`Generated thumbnail #${i + 1}`} />
-								{selectedThumbnail == i && (
-									<div className="absolute top-2 right-2 bg-transparent backdrop-filter backdrop-blur-lg backdrop-saturate-150 rounded-full">
-										<CheckCircleIcon className="w-5 h-5 text-blue-500" />
-									</div>
-								)}
-								{selectedThumbnail == i && ![0, 100].includes(Math.floor(uploadProgress * 100)) && (
-									<div className="absolute bottom-3 right-0 -mr-1 bg-blue-600 text-blue-100 py-1 pr-2 pl-3 text-xs rounded-l-full z-10">
-										Uploading... {Math.floor(uploadProgress * 100)}%
-									</div>
-								)}
-							</button>
-						))}
-					</div>
-				</div>
-			)}
 		</>
 	)
 }
@@ -249,35 +214,39 @@ const MediaPicker: FC<Props> = ({
 								'flex items-center justify-center cursor-pointer flex-col gap-4 w-full h-full'
 							)}
 						>
-							<MediaPreview
-								compact={compact}
-								fileName={context.name}
-								fileType={context.type}
-								hasError={hasError}
-								previewUrl={context.previewUrl}
-								uploading={uploading}
-							/>
+							{!context.previewUrl && (
+								<MediaPreview
+									compact={compact}
+									fileName={context.name}
+									fileType={context.type}
+									hasError={hasError}
+									previewUrl={context.previewUrl}
+									uploading={uploading}
+								/>
+							)}
 							<span
 								className={classNames(
 									compact ? 'items-start gap-1.5 text-left' : 'items-center gap-4 text-center',
 									'flex flex-col'
 								)}
 							>
-								<span
-									className={classNames(
-										compact ? '' : 'text-lg',
-										context.file ? 'text-gray-600' : 'text-gray-500',
-										'font-semibold break-words'
-									)}
-								>
-									{!cover && context.file ? (
-										context.file.name
-									) : (
-										<>
-											{label} {required && <span className="sr-only">(required)</span>}
-										</>
-									)}
-								</span>
+								{!context.previewUrl && (
+									<span
+										className={classNames(
+											compact ? '' : 'text-lg',
+											context.file ? 'text-gray-600' : 'text-gray-500',
+											'font-semibold break-words'
+										)}
+									>
+										{!cover && context.file ? (
+											context.file.name
+										) : (
+											<>
+												{label} {required && <span className="sr-only">(required)</span>}
+											</>
+										)}
+									</span>
+								)}
 								<MediaTag
 									compact={compact}
 									error={error}
@@ -289,13 +258,13 @@ const MediaPicker: FC<Props> = ({
 							</span>
 						</div>
 						{cover && context.type && context.previewUrl && (
-							<div className="flex inset-0 absolute justify-center">
+							<div className="flex inset-2 absolute justify-center">
 								<Media cover name={context.name} type={context.type} url={context.previewUrl} />
 							</div>
 						)}
 					</div>
 					{context.type && (
-						<div className="absolute right-1 top-1">
+						<div className="absolute right-1 top-2">
 							<RemoveButton cover={cover} onClick={context.reset} />
 						</div>
 					)}

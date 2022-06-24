@@ -32,6 +32,7 @@ import Image from 'next/image'
 import { useDispatch, useSelector } from 'react-redux'
 import { setCurrent } from '@/stores/player'
 import { PauseIcon, PlayIcon } from '@heroicons/react/solid'
+import { getImageUrl, includesImage, normalizeUrl } from '@/lib/media'
 
 const VideoPage: FC<{ video: Maybe<Post> }> = ({ video }) => {
 	const [reportOpen, setReportOpen] = useState<boolean>(false)
@@ -60,10 +61,10 @@ const VideoPage: FC<{ video: Maybe<Post> }> = ({ video }) => {
 
 	const coverImg = useMemo(() => {
 		if (!video) return
-		// if (includesImage(post.metadata.media)) return getImageUrl(post.metadata.media)
-		// if (post.metadata.cover) {
-		// 	return normalizeUrl(post.metadata.cover.original.url)
-		// }
+		if (includesImage(video.metadata.media)) return getImageUrl(video.metadata.media)
+		if (video.metadata.cover) {
+			return normalizeUrl(video.metadata.cover.original.url)
+		}
 
 		return `https://avatar.tobi.sh/${video.id}.png`
 	}, [video])
@@ -181,7 +182,7 @@ const VideoPage: FC<{ video: Maybe<Post> }> = ({ video }) => {
 											{video?.stats?.totalAmountOfMirrors ?? <Skeleton width={15} inline />}
 										</span>
 									</div>
-									<div className="flex items-center space-x-1">
+									{/* <div className="flex items-center space-x-1">
 										<button
 											onClick={() => collectPublication(video?.id)}
 											className="hover:bg-gray-100 rounded-full p-2"
@@ -195,7 +196,7 @@ const VideoPage: FC<{ video: Maybe<Post> }> = ({ video }) => {
 										<span>
 											{video?.stats?.totalAmountOfCollects ?? <Skeleton width={15} inline />}
 										</span>
-									</div>
+									</div> */}
 									<div className="flex items-center md:space-x-6">
 										<div className="flex items-center space-x-1">
 											<button

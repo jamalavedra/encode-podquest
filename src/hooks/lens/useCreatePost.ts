@@ -14,7 +14,11 @@ import { ERROR_MESSAGE, LENSHUB_PROXY, RELAYER_ON } from '@/lib/consts'
 import CREATE_POST_SIG from '@/graphql/publications/create-post-request'
 import { useAccount, useContractWrite, useNetwork, useSignTypedData } from 'wagmi'
 
-type CreatePost = { createPost: (post: Metadata, crowdfund?: any) => Promise<unknown>; loading: boolean; error?: Error }
+type CreatePost = {
+	createPost: (post: Metadata, crowdfund?: any, collectModules?: any) => Promise<unknown>
+	loading: boolean
+	error?: Error
+}
 type CreatePostOptions = { onSuccess?: () => void }
 
 const useCreatePost = ({ onSuccess }: CreatePostOptions = {}): CreatePost => {
@@ -71,7 +75,7 @@ const useCreatePost = ({ onSuccess }: CreatePostOptions = {}): CreatePost => {
 	//#endregion
 
 	const createPost = useCallback(
-		async (post: Metadata, crowdfund: any) => {
+		async (post: Metadata, crowdfund: any, collectModules: any) => {
 			if (!account?.address) throw toast.error('Please connect your wallet first.')
 			if (activeChain?.unsupported) throw toast.error('Please change your network.')
 			if (!profile?.id) throw toast.error('Please create a Lens profile first.')
@@ -100,6 +104,8 @@ const useCreatePost = ({ onSuccess }: CreatePostOptions = {}): CreatePost => {
 													followerOnly: false,
 												},
 										  }
+										: collectModules && collectModules.collectModules
+										? collectModules.collectModules
 										: {
 												freeCollectModule: {
 													followerOnly: false,
