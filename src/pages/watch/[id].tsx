@@ -17,7 +17,8 @@ import GET_PUBLICATION from '@/graphql/publications/get-publication'
 import useMirrorPublication from '@/hooks/lens/useMirrorPublication'
 import LensVideoDescription from '@/components/LensVideoDescription'
 import useReactToPublication from '@/hooks/lens/useReactToPublication'
-import { Comment, Maybe, PaginatedPublicationResult, Post } from '@/types/lens'
+import { Comment, Maybe, PaginatedPublicationResult } from '@/types/lens'
+import { LensterPost } from '@/types/lenstertypes'
 import GET_PUBLICATION_COMMENTS from '@/graphql/publications/get-publication-comments'
 import { FlagIcon, ShareIcon, SwitchHorizontalIcon, ThumbDownIcon, ThumbUpIcon } from '@heroicons/react/outline'
 import Image from 'next/image'
@@ -27,7 +28,7 @@ import { PauseIcon, PlayIcon } from '@heroicons/react/solid'
 import { getImageUrl, includesImage, normalizeUrl } from '@/lib/media'
 import Collect from '@/components/Collect'
 
-const VideoPage: FC<{ video: Maybe<Post> }> = ({ video }) => {
+const VideoPage: FC<{ video: Maybe<LensterPost> }> = ({ video }) => {
 	const [reportOpen, setReportOpen] = useState<boolean>(false)
 	const { mirrorPublication, loading: mirrorLoading } = useMirrorPublication()
 	const { upvotePublication, downvotePublication, loading: reactionLoading } = useReactToPublication()
@@ -318,7 +319,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps = async ({ params: { id } }) => {
 	const {
 		data: { video },
-	} = await nodeClient.query<{ video: Maybe<Post> }>({ query: GET_PUBLICATION, variables: { id } })
+	} = await nodeClient.query<{ video: Maybe<LensterPost> }>({ query: GET_PUBLICATION, variables: { id } })
 
 	if (!video) return { notFound: true }
 
