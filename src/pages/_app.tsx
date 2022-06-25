@@ -38,7 +38,7 @@ const App = ({ Component, pageProps }) => {
 			</Provider>
 			{IS_PRODUCTION && (
 				<Script
-					data-website-id="32760f64-40b7-4716-b7c0-0e459fde05e8"
+					data-website-id="b157d8e8-cfc3-47ef-8707-1abbd798ca04"
 					src="https://unami-eight.vercel.app/umami.js"
 					async
 					defer
