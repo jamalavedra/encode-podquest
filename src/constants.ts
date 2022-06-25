@@ -18,6 +18,7 @@ export const DEFAULT_COLLECT_TOKEN = IS_MAINNET
 	: '0x9c3C9283D3e44854697Cd22D3Faa240Cfb032889'
 
 export const POLYGONSCAN_URL = IS_MAINNET ? 'https://polygonscan.com' : 'https://mumbai.polygonscan.com'
+export const APP_NAME = 'Podquest'
 
 export const IMAGEKIT_URL_PROD = 'https://ik.imagekit.io/lensterimg'
 export const IMAGEKIT_URL_DEV = 'https://ik.imagekit.io/lensterdev'

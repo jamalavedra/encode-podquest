@@ -9,7 +9,8 @@ import { ProfileProvider } from '@/context/ProfileContext'
 import { apiProvider, configureChains, getDefaultWallets, lightTheme, RainbowKitProvider } from '@rainbow-me/rainbowkit'
 import stores from '@/stores'
 import { Provider } from 'react-redux'
-import Sidebar from '@/components/Sidebar'
+import Script from 'next/script'
+import { IS_PRODUCTION } from '@/constants'
 
 const { chains, provider } = configureChains(
 	[IS_MAINNET ? chain.polygon : chain.polygonMumbai],
@@ -35,6 +36,14 @@ const App = ({ Component, pageProps }) => {
 					</ApolloProvider>
 				</RainbowKitProvider>
 			</Provider>
+			{IS_PRODUCTION && (
+				<Script
+					data-website-id="32760f64-40b7-4716-b7c0-0e459fde05e8"
+					src="https://unami-eight.vercel.app/umami.js"
+					async
+					defer
+				/>
+			)}
 		</WagmiConfig>
 	)
 }

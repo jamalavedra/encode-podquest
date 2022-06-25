@@ -16,28 +16,20 @@ import { GetStaticPaths, GetStaticProps } from 'next'
 import GET_PUBLICATION from '@/graphql/publications/get-publication'
 import useMirrorPublication from '@/hooks/lens/useMirrorPublication'
 import LensVideoDescription from '@/components/LensVideoDescription'
-import useCollectPublication from '@/hooks/lens/useCollectPublication'
 import useReactToPublication from '@/hooks/lens/useReactToPublication'
 import { Comment, Maybe, PaginatedPublicationResult, Post } from '@/types/lens'
 import GET_PUBLICATION_COMMENTS from '@/graphql/publications/get-publication-comments'
-import {
-	FlagIcon,
-	SaveAsIcon,
-	ShareIcon,
-	SwitchHorizontalIcon,
-	ThumbDownIcon,
-	ThumbUpIcon,
-} from '@heroicons/react/outline'
+import { FlagIcon, ShareIcon, SwitchHorizontalIcon, ThumbDownIcon, ThumbUpIcon } from '@heroicons/react/outline'
 import Image from 'next/image'
 import { useDispatch, useSelector } from 'react-redux'
 import { setCurrent } from '@/stores/player'
 import { PauseIcon, PlayIcon } from '@heroicons/react/solid'
 import { getImageUrl, includesImage, normalizeUrl } from '@/lib/media'
+import Collect from '@/components/Collect'
 
 const VideoPage: FC<{ video: Maybe<Post> }> = ({ video }) => {
 	const [reportOpen, setReportOpen] = useState<boolean>(false)
 	const { mirrorPublication, loading: mirrorLoading } = useMirrorPublication()
-	const { collectPublication, loading: collectLoading } = useCollectPublication()
 	const { upvotePublication, downvotePublication, loading: reactionLoading } = useReactToPublication()
 
 	const dispatch = useDispatch()
@@ -121,8 +113,8 @@ const VideoPage: FC<{ video: Maybe<Post> }> = ({ video }) => {
 				{/* <LensVideoRenderer video={video} /> */}
 				<div className="mb-6 pb-4 border-b mx-6">
 					<div className="mt-5 pb-2 border-b">
-						<div>
-							<div className="flex flex-col md:flex-row items-start md:items-center md:justify-between space-y-2 md:space-y-0 text-gray-500">
+						<div className="flex">
+							<div className="flex flex-grow flex-col md:flex-row items-start md:items-center md:justify-between space-y-2 md:space-y-0 text-gray-500">
 								<div className="flex items-center md:space-x-6 justify-between md:justify-start w-full md:w-auto">
 									<div className="flex items-center md:space-x-1">
 										<button onClick={updateCurrent} className="hover:scale-[1.06] rounded-full p-2">
@@ -182,21 +174,7 @@ const VideoPage: FC<{ video: Maybe<Post> }> = ({ video }) => {
 											{video?.stats?.totalAmountOfMirrors ?? <Skeleton width={15} inline />}
 										</span>
 									</div>
-									{/* <div className="flex items-center space-x-1">
-										<button
-											onClick={() => collectPublication(video?.id)}
-											className="hover:bg-gray-100 rounded-full p-2"
-										>
-											{collectLoading ? (
-												<Spinner className="w-5 md:w-6 h-5 md:h-6" />
-											) : (
-												<SaveAsIcon className="w-5 md:w-6 h-5 md:h-6" />
-											)}
-										</button>
-										<span>
-											{video?.stats?.totalAmountOfCollects ?? <Skeleton width={15} inline />}
-										</span>
-									</div> */}
+
 									<div className="flex items-center md:space-x-6">
 										<div className="flex items-center space-x-1">
 											<button
@@ -218,6 +196,25 @@ const VideoPage: FC<{ video: Maybe<Post> }> = ({ video }) => {
 										</div>
 									</div>
 								</div>
+							</div>
+
+							<div className="flex items-center space-x-1">
+								{/* <button
+									onClick={() => collectPublication(video?.id)}
+									className="hover:border-white hover:border-2 border-1 border border-gray-100 rounded p-2"
+								>
+									{collectLoading ? (
+										<Spinner className="w-5 md:w-6 h-5 md:h-6" />
+									) : (
+										<p className="hover:text-white text-gray-200 font-medium text-md">
+											Collect NFT
+										</p>
+									)}
+								</button> */}
+								<Collect post={video} />
+								{/* <span>
+											{video?.stats?.totalAmountOfCollects ?? <Skeleton width={15} inline />}
+										</span> */}
 							</div>
 						</div>
 					</div>
