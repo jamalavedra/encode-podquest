@@ -146,10 +146,6 @@ const CollectModule: FC<Props> = ({ count, setCount, post }) => {
 	const { data, loading } = useQuery(COLLECT_QUERY, {
 		fetchPolicy: 'no-cache',
 		variables: { request: { publicationId: post?.pubId ?? post?.id } },
-		onCompleted(data) {
-			console.log('COLLECT_QUERY', data)
-			console.log('Query', '#8b5cf6', `Fetched collect module details Publication:${post?.pubId ?? post?.id}`)
-		},
 	})
 
 	const collectModule: any = data?.publication?.collectModule
@@ -167,7 +163,6 @@ const CollectModule: FC<Props> = ({ count, setCount, post }) => {
 		skip: !collectModule?.amount?.asset?.address || !account,
 		onCompleted(data) {
 			setAllowed(data?.approvedModuleAllowanceAmount[0]?.allowance !== '0x00')
-			console.log('Query', '#8b5cf6', `Fetched allowance data`)
 		},
 	})
 
@@ -178,10 +173,6 @@ const CollectModule: FC<Props> = ({ count, setCount, post }) => {
 			},
 		},
 		skip: !post?.id,
-		onCompleted(data) {
-			console.log('PUBLICATION_REVENUE_QUERY', data)
-			console.log('Query', '#8b5cf6', `Fetched collect revenue details Publication:${post?.pubId ?? post?.id}`)
-		},
 	})
 
 	useEffect(() => {
@@ -202,7 +193,6 @@ const CollectModule: FC<Props> = ({ count, setCount, post }) => {
 
 	const [broadcast, { data: broadcastData, loading: broadcastLoading }] = useMutation(BROADCAST_MUTATION, {
 		onCompleted(data) {
-			console.log('BROADCAST_MUTATION', data)
 			if (data?.broadcast?.reason !== 'NOT_ALLOWED') {
 				onCompleted()
 			}
@@ -216,7 +206,6 @@ const CollectModule: FC<Props> = ({ count, setCount, post }) => {
 	})
 	const [createCollectTypedData, { loading: typedDataLoading }] = useMutation(CREATE_COLLECT_TYPED_DATA_MUTATION, {
 		onCompleted({ createCollectTypedData }: { createCollectTypedData: CreateCollectBroadcastItemResult }) {
-			console.log('Mutation', '#4ade80', 'Generated createCollectTypedData')
 			const { id, typedData } = createCollectTypedData
 
 			signTypedDataAsync({

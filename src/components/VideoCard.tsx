@@ -36,10 +36,6 @@ const VideoCard: FC<{ post?: Post; expanded?: boolean }> = ({ post, expanded = f
 		return `https://avatar.tobi.sh/${post.id}.png`
 	}, [post])
 
-	const isCurrentItem = useMemo(() => {
-		return current?.id === post && post.id && playing
-	}, [current, post, playing])
-
 	return (
 		<div className="relative w-44 h-72 mr-8 mb-4">
 			<div className="flex-1 absolute space-y-2 group">
@@ -61,13 +57,13 @@ const VideoCard: FC<{ post?: Post; expanded?: boolean }> = ({ post, expanded = f
 					<button
 						onClick={updateCurrent}
 						className={`absolute group-hover:flex group-focus:flex bottom-2 right-2 items-center justify-center ${
-							!isCurrentItem ? 'hidden' : 'flex'
+							post && current.id === post.id ? 'flex' : 'hidden'
 						}`}
 					>
-						{!isCurrentItem ? (
-							<PlayIcon className="w-14 h-14 fill-green-400" />
+						{post && current.id === post.id && playing ? (
+							<PauseIcon className="w-14 h-14 fill-green-400" />
 						) : (
-							<PauseIcon className="text-white w-10 h-10" />
+							<PlayIcon className="w-14 h-14 fill-green-400" />
 						)}
 					</button>
 				</div>

@@ -5,9 +5,11 @@ import { useEffect, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { setControls, setPlaying } from '@/stores/player'
 import { PauseIcon, PlayIcon } from '@heroicons/react/solid'
-import { ChevronLeftIcon, ChevronRightIcon, HeartIcon, VolumeUpIcon } from '@heroicons/react/outline'
+import { ChevronLeftIcon, ChevronRightIcon, HeartIcon, VolumeOffIcon, VolumeUpIcon } from '@heroicons/react/outline'
 import { getImageUrl, getVideo, includesImage, normalizeUrl } from '@/lib/media'
 import Image from 'next/image'
+import Link from 'next/link'
+import Mirror from './Mirror'
 
 function Player() {
 	const dispatch = useDispatch()
@@ -42,31 +44,37 @@ function Player() {
 		return `https://avatar.tobi.sh/${current.id}.png`
 	}, [current])
 
-	// const volumeIcon = useMemo(() => {
-	//     if (state.volume === 0 || state.muted)
-	//         return 'volumeMuted'
-	//     if (state.volume > 0 && state.volume < 0.33)
-	//         return 'volumeLow'
-	//     if (state.volume >= 0.33 && state.volume < 0.66)
-	//         return 'volumeNormal'
-	//     return 'volumeFull'
-	// }, [state.volume, state.muted])
+	const volumeIcon = useMemo(() => {
+		if (state.volume === 0 || state.muted) return 'volumeMuted'
+		return 'volumeFull'
+	}, [state.volume, state.muted])
 
 	return (
-		<div className="flex border-t border-gray-600 bg-gray-800 z-10 px-4 justify-between items-center h-full">
+		<div className="flex border-t border-gray-600 pb-3 bg-gray-800 z-10 px-4 justify-between items-center h-full">
 			<div className="min-w-[11.25rem] w-[30%]">
 				{current && (
 					<div className="flex items-center">
-						<div className="flex items-center mr-3">
+						<div className="flex items-center mr-4">
 							{!sidebar && (
 								<div className="w-14 h-14 mr-3 relative group flex-shrink-0">
-									<Image width={56} height={56} objectFit="cover" src={coverImg} alt="" /> 
+									<Image width={56} height={56} objectFit="cover" src={coverImg} alt="" />
 								</div>
 							)}
-							<div>
-								<h6 className="text-md line-clamp-1 text-white">{current?.metadata?.name}</h6>
-								<p className="text-sm text-white text-opacity-70">{current?.profile?.name}</p>
+							<div className="block">
+								<Link href={'/watch/' + current?.id}>
+									<h6 className="hover:underline text-md line-clamp-1 text-white">
+										{current?.metadata?.name}
+									</h6>
+								</Link>
+								<Link href={'/channel/' + current?.profile?.handle}>
+									<a className="hover:underline text-sm text-white text-opacity-70">
+										{current?.profile?.handle}
+									</a>
+								</Link>
 							</div>
+						</div>
+						<div className="flex justify-between items-center">
+							<Mirror post={current} />
 						</div>
 					</div>
 				)}
@@ -90,7 +98,7 @@ function Player() {
 						<ChevronRightIcon className="w-6 h-6" />
 					</button>
 				</div>
-				<div className="w-full flex items-center mt-1.5 gap-x-2">
+				<div className="w-full flex items-center gap-x-2">
 					{audio}
 					<div className="text-[0.688rem] text-white text-opacity-70">{secondsToTime(state?.time)}</div>
 					<CustomRange
@@ -103,12 +111,16 @@ function Player() {
 					<div className="text-[0.688rem] text-white text-opacity-70">{secondsToTime(state?.duration)}</div>
 				</div>
 			</div>
-			<div className="min-w-[11.25rem] w-[30%] flex items-center justify-end">
+			<div className="min-w-[11.25rem] w-[30%] pr-4 flex items-center justify-end">
 				<button
 					onClick={controls[state.muted ? 'unmute' : 'mute']}
 					className="w-8 h-8 flex items-center justify-center text-white text-opacity-70 hover:text-opacity-100"
 				>
-					<VolumeUpIcon className="w-6 h-6" />
+					{volumeIcon === 'volumeMuted' ? (
+						<VolumeOffIcon className="w-5 h-5" />
+					) : (
+						<VolumeUpIcon className="w-5 h-5" />
+					)}
 				</button>
 				<div className="w-[5.813rem] max-w-full">
 					<CustomRange

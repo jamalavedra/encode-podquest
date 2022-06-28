@@ -34,11 +34,7 @@ interface Props {
 }
 
 const Modules: FC<Props> = ({ feeData, setSelectedModule, selectedModule, setShowModal, setFeeData }) => {
-	const { error, data, loading } = useQuery(MODULES_QUERY, {
-		onCompleted() {
-			console.log('Query', '#8b5cf6', `Fetched enabled modules`)
-		},
-	})
+	const { error, data, loading } = useQuery(MODULES_QUERY, {})
 	const [showFeeEntry, setShowFeeEntry] = useState<boolean>(false)
 
 	const handleSelectModule = (module: EnabledModule) => {

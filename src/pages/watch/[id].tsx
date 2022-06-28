@@ -14,23 +14,22 @@ import FollowButton from '@/components/FollowButton'
 import { formatDistanceToNowStrict } from 'date-fns'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import GET_PUBLICATION from '@/graphql/publications/get-publication'
-import useMirrorPublication from '@/hooks/lens/useMirrorPublication'
 import LensVideoDescription from '@/components/LensVideoDescription'
 import useReactToPublication from '@/hooks/lens/useReactToPublication'
 import { Comment, Maybe, PaginatedPublicationResult } from '@/types/lens'
 import { LensterPost } from '@/types/lenstertypes'
 import GET_PUBLICATION_COMMENTS from '@/graphql/publications/get-publication-comments'
-import { FlagIcon, ShareIcon, SwitchHorizontalIcon, ThumbDownIcon, ThumbUpIcon } from '@heroicons/react/outline'
+import { FlagIcon, ShareIcon, ThumbDownIcon, ThumbUpIcon } from '@heroicons/react/outline'
 import Image from 'next/image'
 import { useDispatch, useSelector } from 'react-redux'
 import { setCurrent } from '@/stores/player'
 import { PauseIcon, PlayIcon } from '@heroicons/react/solid'
 import { getImageUrl, includesImage, normalizeUrl } from '@/lib/media'
 import Collect from '@/components/Collect'
+import Mirror from '@/components/Mirror'
 
 const VideoPage: FC<{ video: Maybe<LensterPost> }> = ({ video }) => {
 	const [reportOpen, setReportOpen] = useState<boolean>(false)
-	const { mirrorPublication, loading: mirrorLoading } = useMirrorPublication()
 	const { upvotePublication, downvotePublication, loading: reactionLoading } = useReactToPublication()
 
 	const dispatch = useDispatch()
@@ -47,10 +46,6 @@ const VideoPage: FC<{ video: Maybe<LensterPost> }> = ({ video }) => {
 			dispatch(setCurrent(video))
 		}
 	}
-
-	const isCurrentItem = useMemo(() => {
-		return current && current?.id === video && video.id && playing
-	}, [current, video, playing])
 
 	const coverImg = useMemo(() => {
 		if (!video) return
@@ -119,10 +114,10 @@ const VideoPage: FC<{ video: Maybe<LensterPost> }> = ({ video }) => {
 								<div className="flex items-center md:space-x-6 justify-between md:justify-start w-full md:w-auto">
 									<div className="flex items-center md:space-x-1">
 										<button onClick={updateCurrent} className="hover:scale-[1.06] rounded-full p-2">
-											{!isCurrentItem ? (
-												<PlayIcon className="w-24 h-24 fill-green-400" />
+											{video && current.id === video.id && playing ? (
+												<PauseIcon className="w-24 h-24 fill-green-400" />
 											) : (
-												<PauseIcon className="text-white w-10 h-10" />
+												<PlayIcon className="w-24 h-24 fill-green-400" />
 											)}
 										</button>
 
@@ -154,27 +149,8 @@ const VideoPage: FC<{ video: Maybe<LensterPost> }> = ({ video }) => {
 											)}
 										</button>
 									</div>
-									<div className="flex items-center space-x-1">
-										<button
-											onClick={() =>
-												mirrorPublication(video?.id, {
-													followerOnlyReferenceModule:
-														video?.referenceModule?.__typename ==
-														'FollowOnlyReferenceModuleSettings',
-												})
-											}
-											className="hover:bg-gray-100 rounded-full p-2"
-										>
-											{mirrorLoading ? (
-												<Spinner className="w-5 md:w-6 h-5 md:h-6" />
-											) : (
-												<SwitchHorizontalIcon className="w-5 md:w-6 h-5 md:h-6" />
-											)}
-										</button>
-										<span>
-											{video?.stats?.totalAmountOfMirrors ?? <Skeleton width={15} inline />}
-										</span>
-									</div>
+
+									{video && <Mirror post={video} />}
 
 									<div className="flex items-center md:space-x-6">
 										<div className="flex items-center space-x-1">

@@ -54,9 +54,6 @@ const Crowdfund: FC<Props> = ({ fund }) => {
 	const { data, loading } = useQuery(COLLECT_QUERY, {
 		variables: { request: { publicationId: fund?.pubId ?? fund?.id } },
 		fetchPolicy: 'no-cache',
-		onCompleted(data) {
-			console.log('Query', '#8b5cf6', `Fetched collect module details Crowdfund:${fund?.pubId ?? fund?.id}`)
-		},
 	})
 
 	const collectModule: any = data?.publication?.collectModule
@@ -67,9 +64,6 @@ const Crowdfund: FC<Props> = ({ fund }) => {
 			request: {
 				publicationId: fund?.__typename === 'Mirror' ? fund?.mirrorOf?.id : fund?.pubId ?? fund?.id,
 			},
-		},
-		onCompleted() {
-			console.log('Query', '#8b5cf6', `Fetched crowdfund revenue details Crowdfund:${fund?.pubId ?? fund?.id}`)
 		},
 	})
 

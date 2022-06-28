@@ -47,11 +47,7 @@ const UploadPage: FC = () => {
 	const [selectedCurrency, setSelectedCurrency] = useState<string>(DEFAULT_COLLECT_TOKEN)
 	const [selectedCurrencySymobol, setSelectedCurrencySymobol] = useState<string>('WMATIC')
 
-	const { data: currencyData } = useQuery(MODULES_CURRENCY_QUERY, {
-		onCompleted() {
-			console.log('Query', '#8b5cf6', `Fetched enabled module currencies`)
-		},
-	})
+	const { data: currencyData } = useQuery(MODULES_CURRENCY_QUERY, {})
 	const { createPost } = useCreatePost()
 
 	const uploadVideo: FormEventHandler<HTMLFormElement> = async event => {

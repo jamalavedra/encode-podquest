@@ -59,7 +59,6 @@ const UploadPage: FC = () => {
 		event.preventDefault()
 		if (!videoCID) return toast.error('Please wait for the video to finish uploading.')
 		if (!thumbnailCID) return toast.error('Please wait for the thumbnail to finish uploading.')
-		console.log(getModule(selectedModule.moduleName).config, feeData)
 		await createPost(
 			{
 				version: MetadataVersions.one,

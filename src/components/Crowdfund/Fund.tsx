@@ -108,7 +108,6 @@ const Fund: FC<Props> = ({ fund, collectModule, setRevenue, revenue }) => {
 		skip: !collectModule?.amount?.asset?.address || !currentUser,
 		onCompleted(data) {
 			setAllowed(data?.approvedModuleAllowanceAmount[0]?.allowance !== '0x00')
-			console.log('Query', '#8b5cf6', `Fetched allowance data`)
 		},
 	})
 
@@ -148,13 +147,11 @@ const Fund: FC<Props> = ({ fund, collectModule, setRevenue, revenue }) => {
 			if (error.message === ERRORS.notMined) {
 				toast.error(error.message)
 			}
-			console.log('Relay Error', '#ef4444', error.message)
 		},
 	})
 	const [createCollectTypedData, { loading: typedDataLoading }] = useMutation(CREATE_COLLECT_TYPED_DATA_MUTATION, {
 		fetchPolicy: 'no-cache',
 		onCompleted({ createCollectTypedData }: { createCollectTypedData: CreateCollectBroadcastItemResult }) {
-			console.log('Mutation', '#4ade80', 'Generated createCollectTypedData')
 			const { id, typedData } = createCollectTypedData
 			signTypedDataAsync({
 				domain: omit(typedData?.domain, '__typename'),
