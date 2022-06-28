@@ -7,6 +7,7 @@ import { setControls, setPlaying } from '@/stores/player'
 import { PauseIcon, PlayIcon } from '@heroicons/react/solid'
 import { ChevronLeftIcon, ChevronRightIcon, HeartIcon, VolumeUpIcon } from '@heroicons/react/outline'
 import { getImageUrl, getVideo, includesImage, normalizeUrl } from '@/lib/media'
+import Image from 'next/image'
 
 function Player() {
 	const dispatch = useDispatch()
@@ -59,7 +60,7 @@ function Player() {
 						<div className="flex items-center mr-3">
 							{!sidebar && (
 								<div className="w-14 h-14 mr-3 relative group flex-shrink-0">
-									<img src={coverImg} alt="" />
+									<Image width={56} height={56} objectFit="cover" src={coverImg} alt="" /> 
 								</div>
 							)}
 							<div>
