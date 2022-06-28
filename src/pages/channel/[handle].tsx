@@ -65,7 +65,7 @@ const ChannelPage: FC<{ profile: Profile }> = ({ profile }) => {
 				{videos?.length > 0 ? (
 					<div className="lg:mx-16 w-full">
 						<h3 className="py-6 text-white font-bold text-2xl">Uploads</h3>
-						<div className="grid grid-cols-6 gap-6">
+						<div className="flex flex-wrap">
 							{videos.map((video, i) => (
 								<VideoCard key={video?.id ?? i} post={video} />
 							))}
