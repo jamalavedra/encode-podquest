@@ -22,7 +22,7 @@ const HomePage = () => {
 				<header className="flex items-center justify-between mb-6">
 					<h3 className="text-4xl text-white font-semibold tracking-tight">{'Welcome'}</h3>
 				</header>
-				<div className="grid grid-cols-6 gap-6">
+				<div className="flex flex-wrap">
 					{videos.map((post, i) => (
 						<VideoCard key={post?.id ?? i} post={post} expanded />
 					))}

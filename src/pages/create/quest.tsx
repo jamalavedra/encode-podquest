@@ -98,7 +98,7 @@ const UploadPage: FC = () => {
 
 	return (
 		<div className="max-h-[85vh] overflow-x-auto">
-			<div className="container mx-auto py-12 px-4 md:px-0">
+			<div className="container mx-auto py-12 px-8">
 				<div className="max-w-xl">
 					<h3 className="text-4xl mb-5 leading-6 font-medium text-white">Podquest Request</h3>
 					<p className="mt-2 text-md text-gray-400">

@@ -144,8 +144,10 @@ const CollectModule: FC<Props> = ({ count, setCount, post }) => {
 	)
 
 	const { data, loading } = useQuery(COLLECT_QUERY, {
+		fetchPolicy: 'no-cache',
 		variables: { request: { publicationId: post?.pubId ?? post?.id } },
-		onCompleted() {
+		onCompleted(data) {
+			console.log('COLLECT_QUERY', data)
 			console.log('Query', '#8b5cf6', `Fetched collect module details Publication:${post?.pubId ?? post?.id}`)
 		},
 	})
@@ -176,7 +178,8 @@ const CollectModule: FC<Props> = ({ count, setCount, post }) => {
 			},
 		},
 		skip: !post?.id,
-		onCompleted() {
+		onCompleted(data) {
+			console.log('PUBLICATION_REVENUE_QUERY', data)
 			console.log('Query', '#8b5cf6', `Fetched collect revenue details Publication:${post?.pubId ?? post?.id}`)
 		},
 	})
@@ -199,6 +202,7 @@ const CollectModule: FC<Props> = ({ count, setCount, post }) => {
 
 	const [broadcast, { data: broadcastData, loading: broadcastLoading }] = useMutation(BROADCAST_MUTATION, {
 		onCompleted(data) {
+			console.log('BROADCAST_MUTATION', data)
 			if (data?.broadcast?.reason !== 'NOT_ALLOWED') {
 				onCompleted()
 			}

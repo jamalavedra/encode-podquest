@@ -54,7 +54,6 @@ const Crowdfund: FC<Props> = ({ fund }) => {
 	const { data, loading } = useQuery(COLLECT_QUERY, {
 		variables: { request: { publicationId: fund?.pubId ?? fund?.id } },
 		fetchPolicy: 'no-cache',
-
 		onCompleted(data) {
 			console.log('Query', '#8b5cf6', `Fetched collect module details Crowdfund:${fund?.pubId ?? fund?.id}`)
 		},

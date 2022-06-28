@@ -36,7 +36,7 @@ const QuestPage = () => {
 							New Quest
 						</Link>
 					</div>
-					<div className="grid grid-cols-3 gap-6">
+					<div className="flex flex-wrap">
 						{crowdfunds.map((post, i) => (
 							<CrowdfundCard key={post?.id ?? i} post={post} />
 						))}

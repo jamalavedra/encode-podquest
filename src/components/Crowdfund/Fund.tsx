@@ -104,6 +104,7 @@ const Fund: FC<Props> = ({ fund, collectModule, setRevenue, revenue }) => {
 				referenceModules: [],
 			},
 		},
+		fetchPolicy: 'no-cache',
 		skip: !collectModule?.amount?.asset?.address || !currentUser,
 		onCompleted(data) {
 			setAllowed(data?.approvedModuleAllowanceAmount[0]?.allowance !== '0x00')
@@ -137,6 +138,7 @@ const Fund: FC<Props> = ({ fund, collectModule, setRevenue, revenue }) => {
 	)
 
 	const [broadcast, { data: broadcastData, loading: broadcastLoading }] = useMutation(BROADCAST_MUTATION, {
+		fetchPolicy: 'no-cache',
 		onCompleted(data) {
 			if (data?.broadcast?.reason !== 'NOT_ALLOWED') {
 				onCompleted()
@@ -150,6 +152,7 @@ const Fund: FC<Props> = ({ fund, collectModule, setRevenue, revenue }) => {
 		},
 	})
 	const [createCollectTypedData, { loading: typedDataLoading }] = useMutation(CREATE_COLLECT_TYPED_DATA_MUTATION, {
+		fetchPolicy: 'no-cache',
 		onCompleted({ createCollectTypedData }: { createCollectTypedData: CreateCollectBroadcastItemResult }) {
 			console.log('Mutation', '#4ade80', 'Generated createCollectTypedData')
 			const { id, typedData } = createCollectTypedData

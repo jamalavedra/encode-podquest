@@ -41,7 +41,7 @@ const VideoCard: FC<{ post?: Post; expanded?: boolean }> = ({ post, expanded = f
 	}, [current, post, playing])
 
 	return (
-		<div className="relative">
+		<div className="relative w-44 h-72 mr-8 mb-4">
 			<div className="flex-1 absolute space-y-2 group">
 				<div className="relative">
 					<Link href={`/watch/${post?.id}`}>
