@@ -160,7 +160,7 @@ const CollectModule: FC<Props> = ({ count, setCount, post }) => {
 				referenceModules: [],
 			},
 		},
-		skip: !collectModule?.amount?.asset?.address || !account,
+		skip: !collectModule?.amount?.asset?.address,
 		onCompleted(data) {
 			setAllowed(data?.approvedModuleAllowanceAmount[0]?.allowance !== '0x00')
 		},
@@ -245,7 +245,6 @@ const CollectModule: FC<Props> = ({ count, setCount, post }) => {
 
 		createCollectTypedData({
 			variables: {
-				options: { overrideSigNonce: userSigNonce },
 				request: { publicationId: post?.pubId ?? post?.id },
 			},
 		})

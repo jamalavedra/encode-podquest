@@ -22,8 +22,8 @@ import { useAccount } from 'wagmi'
 export const PUBLICATION_REVENUE_QUERY = gql`
 	query PublicationRevenue($request: PublicationRevenueQueryRequest!) {
 		publicationRevenue(request: $request) {
-			earnings {
-				value
+			revenue {
+				total{value}
 			}
 		}
 	}
@@ -68,7 +68,7 @@ const Crowdfund: FC<Props> = ({ fund }) => {
 	})
 
 	useEffect(() => {
-		setRevenue(parseFloat(revenueData?.publicationRevenue?.earnings?.value ?? 0))
+		setRevenue(parseFloat(revenueData?.publicationRevenue?.revenue?.total?.value ?? 0))
 	}, [revenueData])
 
 	const goalAmount = fund?.metadata?.attributes[1]?.value
