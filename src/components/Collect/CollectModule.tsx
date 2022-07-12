@@ -335,28 +335,7 @@ const CollectModule: FC<Props> = ({ count, setCount, post }) => {
 							</div>
 						) : null}
 					</div>
-					{revenueData?.publicationRevenue && (
-						<div className="flex items-center space-x-2">
-							<CashIcon className="w-4 h-4 text-gray-500" />
-							<div className="flex items-center space-x-1.5">
-								<span>Revenue:</span>
-								<span className="flex items-center space-x-1">
-									<img
-										src={getTokenImage(collectModule?.amount?.asset?.symbol)}
-										className="w-5 h-5"
-										height={20}
-										width={20}
-										alt={collectModule?.amount?.asset?.symbol}
-										title={collectModule?.amount?.asset?.symbol}
-									/>
-									<div className="flex items-baseline space-x-1.5">
-										<div className="font-bold">{revenue}</div>
-										<div className="text-[10px]">{collectModule?.amount?.asset?.symbol}</div>
-									</div>
-								</span>
-							</div>
-						</div>
-					)}
+
 					{collectModule?.endTimestamp && (
 						<div className="flex items-center space-x-2">
 							<ClockIcon className="w-4 h-4 text-gray-500" />

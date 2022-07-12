@@ -84,7 +84,7 @@ const Collectors: FC<Props> = ({ pubId }) => {
 					{collectors?.map((wallet: Wallet) => (
 						<div className="p-5" key={wallet?.address}>
 							{wallet?.defaultProfile ? (
-								<UserProfile profile={wallet?.defaultProfile as Profile} showBio />
+								<UserProfile profile={wallet?.defaultProfile as Profile} />
 							) : (
 								<WalletProfile wallet={wallet} />
 							)}
