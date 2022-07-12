@@ -9,7 +9,7 @@ interface CardProps {
 
 export const Card: FC<CardProps> = ({ children, className = '', forceRounded = false }) => {
 	return (
-		<div className={clsx(forceRounded ? 'rounded-xl' : 'rounded-none sm:rounded-xl', 'border bg-white', className)}>
+		<div className={clsx(forceRounded ? 'rounded-xl max-w-md' : 'rounded-none sm:rounded-xl', 'border bg-white', className)}>
 			{children}
 		</div>
 	)

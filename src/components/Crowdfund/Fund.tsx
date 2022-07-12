@@ -17,6 +17,7 @@ import { useAccount, useBalance, useContractWrite, useNetwork, useSignTypedData 
 
 import IndexStatus from '@/components/Shared/IndexStatus'
 import Spinner from '../Spinner'
+import { ethers } from 'ethers'
 
 export const ALLOWANCE_SETTINGS_QUERY = gql`
 	query ApprovedModuleAllowanceAmount($request: ApprovedModuleAllowanceAmountRequest!) {
@@ -125,12 +126,16 @@ const Fund: FC<Props> = ({ fund, collectModule, setRevenue, revenue }) => {
 			addressOrName: LENSHUB_PROXY,
 			contractInterface: LensHubProxy,
 		},
+
 		'collectWithSig',
 		{
+			overrides: { value: ethers.utils.parseEther("0.001") },
 			onSuccess() {
 				onCompleted()
 			},
+			
 			onError(error: any) {
+				console.log(error)
 				toast.error(error?.data?.message ?? error?.message)
 			},
 		}
@@ -181,6 +186,7 @@ const Fund: FC<Props> = ({ fund, collectModule, setRevenue, revenue }) => {
 			})
 		},
 		onError(error) {
+			console.log(error)
 			toast.error(error.message ?? ERROR_MESSAGE)
 		},
 	})
@@ -193,7 +199,6 @@ const Fund: FC<Props> = ({ fund, collectModule, setRevenue, revenue }) => {
 		} else {
 			createCollectTypedData({
 				variables: {
-					options: { overrideSigNonce: userSigNonce },
 					request: { publicationId: fund.id },
 				},
 			})
